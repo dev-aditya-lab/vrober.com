@@ -11,7 +11,7 @@ export default function MobileNav() {
   ]
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 z-50 max-w-screen bg-white border-t border-gray-200 shadow-md flex justify-between md:hidden px-5 py-3">
+      <div className="fixed bottom-0 left-0 right-0 z-50 max-w-screen bg-white border-t border-gray-200 shadow-md flex justify-between md:hidden px-9 py-3">
         {
           navItem.map((item, i) => (
             <Link href={item.link} key={i}>
