@@ -1,5 +1,6 @@
 import DesktopMessage from "../components/DesktopMessage";
 import MHomeCategory from "../components/MHomeCategory";
+import MostBookedServices from "../components/MostBookedServices";
 import PopularServices from "../components/PopularServices";
 import SearchBar from "../components/SearchBar";
 
@@ -10,10 +11,11 @@ export default function Home() {
             <DesktopMessage />
 
             {/* Mobile Content - Only shown on mobile */}
-            <div className="md:hidden">
+            <div className="md:hidden ">
                 <SearchBar />
                 <MHomeCategory />
                 <PopularServices />
+                <MostBookedServices/>
             </div>
         </>
     )
