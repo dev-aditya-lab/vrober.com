@@ -5,18 +5,18 @@ import PopularServices from '../_components/PopularServices';
 import SearchBar from '../_components/SearchBar';
 
 export default function Home() {
-    return (
-        <>
-            {/* Desktop Message - Only shown on desktop */}
-            <DesktopMessage />
+  return (
+    <>
+      {/* Desktop Message - Only shown on desktop */}
+      <DesktopMessage />
 
-            {/* Mobile Content - Only shown on mobile */}
-            <div className="md:hidden">
-                <SearchBar />
-                <MHomeCategory />
-                <PopularServices />
-                <MostBookedServices />
-            </div>
-        </>
-    );
+      {/* Mobile Content - Only shown on mobile */}
+      <div className="md:hidden">
+        <SearchBar />
+        <MHomeCategory />
+        <PopularServices />
+        <MostBookedServices />
+      </div>
+    </>
+  );
 }
