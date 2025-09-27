@@ -15,15 +15,15 @@ export default function Home() {
       <DesktopMessage />
 
       {/* Mobile Content - Only shown on mobile */}
-      <div className="md:hidden mb-20">
+      <div className="mb-20 md:hidden">
         <SearchBar />
         <MHomeCategory />
         <PopularServices />
         <MostBookedServices />
-        <CleaningServices/>
-        <SalonforWomen/>
-        <PremiumServices/>
-        <OtherServices/>
+        <CleaningServices />
+        <SalonforWomen />
+        <PremiumServices />
+        <OtherServices />
       </div>
     </>
   );
