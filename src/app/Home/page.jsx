@@ -2,6 +2,7 @@ import CleaningServices from '../_components/CleaningServices';
 import DesktopMessage from '../_components/DesktopMessage';
 import MHomeCategory from '../_components/MHomeCategory';
 import MostBookedServices from '../_components/MostBookedServices';
+import OtherServices from '../_components/OtherServices';
 import PopularServices from '../_components/PopularServices';
 import PremiumServices from '../_components/PremiumServices';
 import SearchBar from '../_components/SearchBar';
@@ -22,6 +23,7 @@ export default function Home() {
         <CleaningServices/>
         <SalonforWomen/>
         <PremiumServices/>
+        <OtherServices/>
       </div>
     </>
   );
