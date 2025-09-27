@@ -4,6 +4,7 @@ import MHomeCategory from '../_components/MHomeCategory';
 import MostBookedServices from '../_components/MostBookedServices';
 import PopularServices from '../_components/PopularServices';
 import SearchBar from '../_components/SearchBar';
+import SalonforWomen from './../_components/SalonforWomen';
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         <PopularServices />
         <MostBookedServices />
         <CleaningServices/>
+        <SalonforWomen/>
       </div>
     </>
   );
