@@ -39,3 +39,40 @@
     transform 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out;
 }
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom animations for desktop message */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse animation with different timing */
+@keyframes gentle-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 4s ease-in-out infinite;
+}
