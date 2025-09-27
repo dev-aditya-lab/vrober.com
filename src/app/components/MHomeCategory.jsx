@@ -18,7 +18,7 @@ export default function MHomeCategory() {
 
     return (
         <>
-            <h1 className="mb-2 font-bold text-2xl">What are you looking for?</h1>
+            <h1 className="Seaction-heading">What are you looking for?</h1>
             <div className="flex flex-wrap justify-between gap-y-3">
                 {limitedCategories.map((cat, index) => (
                     <CategoryCard key={index} icon={cat.icon} title={cat.title} />
