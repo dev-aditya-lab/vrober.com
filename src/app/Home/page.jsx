@@ -15,7 +15,7 @@ export default function Home() {
       <DesktopMessage />
 
       {/* Mobile Content - Only shown on mobile */}
-      <div className="md:hidden mb-24">
+      <div className="md:hidden mb-20">
         <SearchBar />
         <MHomeCategory />
         <PopularServices />
