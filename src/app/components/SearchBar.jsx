@@ -1,7 +1,7 @@
 
 export default function SearchBar() {
     return (
-        <div className="relative w-full max-w-md mx-auto">
+        <div className="relative w-full max-w-md mx-auto my-5">
             <input
                 type="search"
                 placeholder="Luxury Services Delivered to Your Doorstep"
