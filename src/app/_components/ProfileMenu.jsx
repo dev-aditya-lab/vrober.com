@@ -1,17 +1,17 @@
 'use client'
-import { 
-    FaUser, 
-    FaCreditCard, 
-    FaClockRotateLeft, 
-    FaLocationDot, 
-    FaBell, 
-    FaShieldHalved,
-    FaHeadset,
-    FaChevronRight,
-    FaToggleOn,
-    FaToggleOff
-} from 'react-icons/fa6'
 import { useState } from 'react'
+import {
+    FaBell,
+    FaChevronRight,
+    FaClockRotateLeft,
+    FaCreditCard,
+    FaHeadset,
+    FaLocationDot,
+    FaShieldHalved,
+    FaToggleOff,
+    FaToggleOn,
+    FaUser
+} from 'react-icons/fa6'
 
 export default function ProfileMenu() {
     const [notificationsEnabled, setNotificationsEnabled] = useState(true)

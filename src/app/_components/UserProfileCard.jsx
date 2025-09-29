@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FaStar, FaCamera } from 'react-icons/fa6'
+import { FaCamera, FaStar } from 'react-icons/fa6'
 
 export default function UserProfileCard() {
     return (
@@ -25,7 +25,7 @@ export default function UserProfileCard() {
                 {/* User Info */}
                 <h2 className="text-2xl font-bold text-gray-900 mb-1">Sarah Johnson</h2>
                 <p className="text-sm text-gray-600 mb-3">sarah.johnson@email.com</p>
-                
+
                 {/* Rating */}
                 <div className="flex items-center justify-center space-x-1 mb-6">
                     <FaStar className="w-4 h-4 text-yellow-400" />

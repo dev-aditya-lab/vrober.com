@@ -1,7 +1,7 @@
 import ProfileHeader from '../_components/ProfileHeader'
-import UserProfileCard from '../_components/UserProfileCard'
 import ProfileMenu from '../_components/ProfileMenu'
 import ProfileSignOut from '../_components/ProfileSignOut'
+import UserProfileCard from '../_components/UserProfileCard'
 
 export default function ProfilePage() {
     return (
