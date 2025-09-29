@@ -1,6 +1,5 @@
 import BookingHeader from '../_components/BookingHeader'
 import BookingTabs from '../_components/BookingTabs'
-import BottomNavigation from '../_components/BottomNavigation'
 import CurrentBooking from '../_components/CurrentBooking'
 import RecentBookings from '../_components/RecentBookings'
 
@@ -13,7 +12,6 @@ export default function BookingsPage() {
                 <CurrentBooking />
                 <RecentBookings />
             </div>
-            <BottomNavigation />
         </div>
     )
 }
