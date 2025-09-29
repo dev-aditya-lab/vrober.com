@@ -24,7 +24,7 @@ export default function Home() {
         <SalonforWomen />
         <PremiumServices />
         <OtherServices />
-      </div>
+          </div>
     </>
   );
 }
