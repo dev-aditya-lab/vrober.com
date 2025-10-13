@@ -1,19 +1,21 @@
+'use client';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function MHomeCategory() {
   const categories = [
-    { icon: '/assets/ac.png', title: 'Repair' },
-    { icon: '/assets/grooming.png', title: 'Grooming' },
-    { icon: '/assets/cleaning.png', title: 'Cleaning' },
-    { icon: '/assets/painting.png', title: 'Painting' },
-    { icon: '/assets/grooming.png', title: 'Grooming' },
-    { icon: '/assets/cleaning.png', title: 'Cleaning' },
-    { icon: '/assets/painting.png', title: 'Painting' },
-    { icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { icon: '/assets/electrician.png', title: 'Electrician' },
+    { id: 1, icon: '/assets/ac.png', title: 'Repair' },
+    { id: 2, icon: '/assets/grooming.png', title: 'Grooming' },
+    { id: 3, icon: '/assets/cleaning.png', title: 'Cleaning' },
+    { id: 4, icon: '/assets/painting.png', title: 'Painting' },
+    { id: 5, icon: '/assets/grooming.png', title: 'Grooming' },
+    { id: 6, icon: '/assets/cleaning.png', title: 'Cleaning' },
+    { id: 7, icon: '/assets/painting.png', title: 'Painting' },
+    { id: 8, icon: '/assets/plumbing.png', title: 'Plumbing' },
+    { id: 9, icon: '/assets/plumbing.png', title: 'Plumbing' },
+    { id: 10, icon: '/assets/plumbing.png', title: 'Plumbing' },
+    { id: 11, icon: '/assets/plumbing.png', title: 'Plumbing' },
+    { id: 12, icon: '/assets/electrician.png', title: 'Electrician' },
   ];
   const limitedCategories = categories.slice(0, 7);
 
@@ -22,17 +24,39 @@ export default function MHomeCategory() {
       <h1 className="Seaction-heading">What are you looking for?</h1>
       <div className="flex flex-wrap justify-between gap-y-3">
         {limitedCategories.map((cat, index) => (
-          <CategoryCard key={index} icon={cat.icon} title={cat.title} />
+          <CategoryCard
+            key={cat.id}
+            icon={cat.icon}
+            title={cat.title}
+            id={cat.id}
+          />
         ))}
-        <CategoryCard icon="/assets/more.png" title="More" />
+        <CategoryCard icon="/assets/more.png" title="More" id={'allServices'} />
       </div>
     </>
   );
 }
 
-const CategoryCard = ({ icon, title }) => {
+const CategoryCard = ({ icon, title, id }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    console.log('Category clicked:', id, title);
+    if (id) {
+      router.push(`/category/${id}`);
+    } else {
+      // For "More" button or categories without ID
+      console.log('Show all services');
+      // You can redirect to a services page here
+      // router.push('/services');
+    }
+  };
+
   return (
-    <div className="flex h-20 w-20 flex-col items-center justify-center overflow-hidden rounded-xl bg-zinc-50 p-4 shadow-md">
+    <div
+      onClick={handleClick}
+      className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl bg-zinc-50 p-4 shadow-md transition-all hover:scale-105 hover:shadow-lg active:scale-95"
+    >
       <Image
         src={icon}
         alt={title}
