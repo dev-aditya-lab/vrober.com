@@ -4,18 +4,18 @@ import { useRouter } from 'next/navigation';
 
 export default function MHomeCategory() {
   const categories = [
-    { id: 1, icon: '/assets/ac.png', title: 'Repair' },
+    { id: 1, icon: '/assets/acRepair.png', title: 'Repair' },
     { id: 2, icon: '/assets/grooming.png', title: 'Grooming' },
-    { id: 3, icon: '/assets/cleaning.png', title: 'Cleaning' },
-    { id: 4, icon: '/assets/painting.png', title: 'Painting' },
-    { id: 5, icon: '/assets/grooming.png', title: 'Grooming' },
+    { id: 3, icon: '/assets/plumbing.png', title: 'Plumbing' },
+    { id: 4, icon: '/assets/Makeup.png', title: 'Makeup' },
+    { id: 5, icon: '/assets/Electrician.png', title: 'Electrician' },
     { id: 6, icon: '/assets/cleaning.png', title: 'Cleaning' },
     { id: 7, icon: '/assets/painting.png', title: 'Painting' },
-    { id: 8, icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { id: 9, icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { id: 10, icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { id: 11, icon: '/assets/plumbing.png', title: 'Plumbing' },
-    { id: 12, icon: '/assets/electrician.png', title: 'Electrician' },
+    { id: 8, icon: '/assets/Catering.png', title: 'Catering,' },
+    { id: 9, icon: '/assets/BabyCare.png', title: 'Baby Care' },
+    { id: 10, icon: '/assets/Washing.png', title: 'Washing' },
+    { id: 11, icon: '/assets/pet.png', title: 'Pet' },
+    { id: 12, icon: '/assets/Tutors.png', title: 'Tutors' },
   ];
   const limitedCategories = categories.slice(0, 7);
 

@@ -226,7 +226,7 @@ const ServiceCard = ({ service, onBook }) => {
             onClick={onBook}
             className="w-full rounded-md border-2 border-purple-600 bg-white px-4 py-2 text-sm font-semibold text-purple-600 transition-colors hover:bg-purple-50"
           >
-            Add
+            Book now
           </button>
         </div>
       </div>
