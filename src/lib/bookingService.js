@@ -10,50 +10,30 @@
  * Fetch all available services
  * @returns {Promise} Array of service objects
  */
+import api from './axios';
+
 export const fetchServices = async () => {
   try {
-    // TODO: Uncomment when backend is ready
-    // const response = await api.get('/api/services');
-    // return response.data;
-
-    // Mock data for development
-    return [
-      {
-        id: 1,
-        name: 'AC Service',
-        price: 499,
-        duration: '60 min',
-        description: 'Complete AC maintenance and repair',
-        category: 'Home Services',
-      },
-      {
-        id: 2,
-        name: 'Cleaning Service',
-        price: 799,
-        duration: '90 min',
-        description: 'Deep cleaning for your home',
-        category: 'Home Services',
-      },
-      {
-        id: 3,
-        name: 'Salon Service',
-        price: 599,
-        duration: '45 min',
-        description: 'Professional grooming services',
-        category: 'Personal Care',
-      },
-      {
-        id: 4,
-        name: 'Painting Service',
-        price: 1299,
-        duration: '120 min',
-        description: 'Interior and exterior painting',
-        category: 'Home Services',
-      },
-    ];
+    const response = await api.get('/services', { params: { limit: 50 } });
+    // Map backend service shape to simplified frontend consumption
+    return response.data.services.map((s) => ({
+      id: s._id,
+      name: s.serviceName,
+      price: s.price || 0,
+      duration: s.duration || '',
+      description: s.description || '',
+      vendorId: s.vendorId?._id,
+      vendorName: s.vendorId?.name,
+      rating: s.rating,
+      imageUrl: s.imageUrl,
+      serviceType: s.serviceType,
+    }));
   } catch (error) {
-    console.error('Error fetching services:', error);
-    throw error;
+    console.error(
+      'Error fetching services (API). Falling back to empty list.',
+      error
+    );
+    return [];
   }
 };
 
@@ -64,14 +44,24 @@ export const fetchServices = async () => {
  */
 export const fetchServiceById = async (serviceId) => {
   try {
-    // TODO: Uncomment when backend is ready
-    // const response = await api.get(`/api/services/${serviceId}`);
-    // return response.data;
-
-    const services = await fetchServices();
-    return services.find((s) => s.id === serviceId);
+    const response = await api.get(`/services/${serviceId}`);
+    const s = response.data.service;
+    return {
+      id: s._id,
+      name: s.serviceName,
+      price: s.price || 0,
+      duration: s.duration || '',
+      description: s.description || '',
+      vendorId: s.vendorId?._id,
+      vendorName: s.vendorId?.name,
+      rating: s.rating,
+      imageUrl: s.imageUrl,
+      serviceType: s.serviceType,
+      toolsRequired: s.toolsRequired || [],
+      reviews: s.reviews || [],
+    };
   } catch (error) {
-    console.error('Error fetching service:', error);
+    console.error('Error fetching service by ID:', error);
     throw error;
   }
 };
@@ -173,23 +163,11 @@ export const fetchAvailableTimeSlots = async (date, serviceId) => {
  */
 export const createBooking = async (bookingData) => {
   try {
-    // TODO: Uncomment when backend is ready
-    // const response = await api.post('/api/bookings', bookingData);
-    // return response.data;
-
-    // Mock response
-    return {
-      success: true,
-      bookingId: `BK${Date.now().toString().slice(-8)}`,
-      message: 'Booking created successfully',
-      data: {
-        ...bookingData,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      },
-    };
+    // bookingData expects: vendorId, serviceId, serviceDate, serviceTime, address, location {lat,lng}, price, description, specialInstructions, paymentMethod
+    const response = await api.post('/bookings', bookingData);
+    return response.data.booking;
   } catch (error) {
-    console.error('Error creating booking:', error);
+    console.error('Error creating booking (API):', error);
     throw error;
   }
 };
@@ -199,18 +177,27 @@ export const createBooking = async (bookingData) => {
  * @param {string} userId - User ID (optional, uses session if not provided)
  * @returns {Promise} Array of booking objects
  */
-export const fetchUserBookings = async (userId = null) => {
+export const fetchUserBookings = async () => {
   try {
-    // TODO: Uncomment when backend is ready
-    // const endpoint = userId ? `/api/bookings/user/${userId}` : '/api/bookings/my';
-    // const response = await api.get(endpoint);
-    // return response.data;
-
-    // Mock data
-    return [];
+    const response = await api.get('/bookings/user', { params: { limit: 50 } });
+    const list = response.data.bookings || [];
+    return list.map((b) => ({
+      id: b._id,
+      status: b.status,
+      serviceName: b.serviceId?.serviceName,
+      serviceType: b.serviceId?.serviceType,
+      vendorName: b.vendorId?.name,
+      date: b.serviceDate,
+      time: b.serviceTime,
+      price: b.price,
+      address: b.address,
+      rating: b.rating,
+      review: b.review,
+      createdAt: b.createdAt,
+    }));
   } catch (error) {
     console.error('Error fetching bookings:', error);
-    throw error;
+    return [];
   }
 };
 
@@ -238,17 +225,12 @@ export const fetchBookingById = async (bookingId) => {
  * @param {string} bookingId - Booking ID
  * @returns {Promise} Cancellation confirmation
  */
-export const cancelBooking = async (bookingId) => {
+export const cancelBooking = async (bookingId, cancellationReason = '') => {
   try {
-    // TODO: Uncomment when backend is ready
-    // const response = await api.post(`/api/bookings/${bookingId}/cancel`);
-    // return response.data;
-
-    // Mock response
-    return {
-      success: true,
-      message: 'Booking cancelled successfully',
-    };
+    const response = await api.put(`/bookings/${bookingId}/cancel`, {
+      cancellationReason,
+    });
+    return response.data;
   } catch (error) {
     console.error('Error cancelling booking:', error);
     throw error;
@@ -275,6 +257,68 @@ export const rescheduleBooking = async (bookingId, newSchedule) => {
     };
   } catch (error) {
     console.error('Error rescheduling booking:', error);
+    throw error;
+  }
+};
+
+// ==================== VENDOR BOOKINGS ====================
+
+export const fetchVendorBookings = async () => {
+  try {
+    const response = await api.get('/bookings/vendor', {
+      params: { limit: 50 },
+    });
+    const list = response.data.bookings || [];
+    return list.map((b) => ({
+      id: b._id,
+      status: b.status,
+      userName: b.userId?.name,
+      serviceName: b.serviceId?.serviceName,
+      date: b.serviceDate,
+      time: b.serviceTime,
+      price: b.price,
+      address: b.address,
+      createdAt: b.createdAt,
+    }));
+  } catch (error) {
+    console.error('Error fetching vendor bookings:', error);
+    return [];
+  }
+};
+
+export const acceptVendorBooking = async (bookingId, vendorNotes = '') => {
+  try {
+    const response = await api.put(`/bookings/${bookingId}/accept`, {
+      vendorNotes,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error accepting booking:', error);
+    throw error;
+  }
+};
+
+export const rejectVendorBooking = async (
+  bookingId,
+  cancellationReason = ''
+) => {
+  try {
+    const response = await api.put(`/bookings/${bookingId}/reject`, {
+      cancellationReason,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error rejecting booking:', error);
+    throw error;
+  }
+};
+
+export const completeVendorBooking = async (bookingId) => {
+  try {
+    const response = await api.put(`/bookings/${bookingId}/complete`);
+    return response.data;
+  } catch (error) {
+    console.error('Error completing booking:', error);
     throw error;
   }
 };
@@ -486,7 +530,7 @@ export const applyPromoCode = async (promoCode, amount) => {
   }
 };
 
-export default {
+const bookingApi = {
   // Services
   fetchServices,
   fetchServiceById,
@@ -503,6 +547,10 @@ export default {
   fetchBookingById,
   cancelBooking,
   rescheduleBooking,
+  fetchVendorBookings,
+  acceptVendorBooking,
+  rejectVendorBooking,
+  completeVendorBooking,
 
   // Payments
   initiatePayment,
@@ -520,3 +568,5 @@ export default {
   // Promo
   applyPromoCode,
 };
+
+export default bookingApi;

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   FaBell,
   FaChevronRight,
@@ -83,49 +84,45 @@ export default function ProfileMenu() {
     },
   ];
 
+  const Tile = ({ item }) => {
+    const content = (
+      <div className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md">
+        <div className="flex items-center space-x-4">
+          <div className={`h-12 w-12 ${item.iconBg} flex flex-shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-110`}>
+            <item.icon className="h-6 w-6 text-white" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="mb-1 text-base font-semibold text-gray-900">{item.title}</h3>
+            <p className="text-sm text-gray-600">{item.subtitle}</p>
+          </div>
+          <div className="flex-shrink-0">
+            {item.hasArrow && (
+              <FaChevronRight className="h-4 w-4 text-gray-400 transition-colors group-hover:text-gray-600" />
+            )}
+            {item.hasToggle && (
+              <button onClick={item.onToggle} className="transition-transform duration-200 hover:scale-110">
+                {item.toggleState ? (
+                  <FaToggleOn className="h-8 w-8 text-blue-500" />
+                ) : (
+                  <FaToggleOff className="h-8 w-8 text-gray-400" />
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+    return item.href ? (
+      <Link href={item.href} className="block">{content}</Link>
+    ) : (
+      <div className="cursor-pointer">{content}</div>
+    );
+  };
+
   return (
     <div className="space-y-3">
       {menuItems.map((item) => (
-        <div
-          key={item.id}
-          className="group cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:shadow-md"
-        >
-          <div className="flex items-center space-x-4">
-            {/* Icon */}
-            <div
-              className={`h-12 w-12 ${item.iconBg} flex flex-shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-110`}
-            >
-              <item.icon className="h-6 w-6 text-white" />
-            </div>
-
-            {/* Content */}
-            <div className="min-w-0 flex-1">
-              <h3 className="mb-1 text-base font-semibold text-gray-900">
-                {item.title}
-              </h3>
-              <p className="text-sm text-gray-600">{item.subtitle}</p>
-            </div>
-
-            {/* Action */}
-            <div className="flex-shrink-0">
-              {item.hasArrow && (
-                <FaChevronRight className="h-4 w-4 text-gray-400 transition-colors group-hover:text-gray-600" />
-              )}
-              {item.hasToggle && (
-                <button
-                  onClick={item.onToggle}
-                  className="transition-transform duration-200 hover:scale-110"
-                >
-                  {item.toggleState ? (
-                    <FaToggleOn className="h-8 w-8 text-blue-500" />
-                  ) : (
-                    <FaToggleOff className="h-8 w-8 text-gray-400" />
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+        <Tile key={item.id} item={item} />
       ))}
     </div>
   );
