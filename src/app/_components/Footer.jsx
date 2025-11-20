@@ -89,11 +89,11 @@ export default function Footer() {
                   Privacy Policy
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/legal/partner-agreement" className="text-gray-300 hover:text-white transition-colors">
                   Partner Agreement
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/legal/cancellation-policy" className="text-gray-300 hover:text-white transition-colors">
                   Cancellation Policy
