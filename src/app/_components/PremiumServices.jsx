@@ -14,10 +14,10 @@ export default function PremiumServices() {
     let active = true;
     setLoading(true);
     api
-      .get('/services/home-sections', { params: { limit: 10 } })
+      .get('/services', { params: { premium: 'true', limit: 10 } })
       .then((res) => {
         if (!active) return;
-        setList(res.data.premium || []);
+        setList(res.data.services || []);
       })
       .catch((err) => {
         if (!active) return;

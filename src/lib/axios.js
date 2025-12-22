@@ -2,7 +2,8 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1',
-  withCredentials: true, // Important: send cookies for authentication
+  // Avoid cross-origin credential preflight issues for public endpoints; tokens are sent via header
+  withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -51,27 +51,42 @@ export default function BookingsPage() {
                 <div>
                   <p className="font-semibold text-black">{b.serviceName}</p>
                   <p className="text-sm text-gray-600">
-                    {b.date?.slice(0, 10)} • {b.time} • {b.vendorName}
+                    {b.date?.slice(0, 10)} • {b.time}
                   </p>
-                  <p className="text-sm text-gray-600">₹{b.price}</p>
+                  {(b.partnerName || b.vendorName) && (
+                    <p className="text-sm text-gray-600">
+                      Partner: {b.partnerName || b.vendorName}
+                    </p>
+                  )}
+                  {!b.partnerName && !b.vendorName && b.status === 'unassigned' && (
+                    <p className="text-sm text-amber-600">
+                      ⏳ Awaiting partner assignment
+                    </p>
+                  )}
+                  <p className="text-sm font-medium text-black">₹{b.price}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      b.status === 'pending'
-                        ? 'bg-gray-100 text-gray-800'
-                        : b.status === 'accepted'
-                          ? 'bg-black text-white'
-                          : b.status === 'completed'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-red-100 text-red-700'
+                      b.status === 'unassigned'
+                        ? 'bg-amber-100 text-amber-800'
+                        : b.status === 'pending' || b.status === 'assigned'
+                          ? 'bg-blue-100 text-blue-800'
+                          : b.status === 'accepted' || b.status === 'in-progress'
+                            ? 'bg-purple-100 text-purple-800'
+                            : b.status === 'completed'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-red-100 text-red-700'
                     }`}
                   >
-                    {b.status}
+                    {b.status === 'unassigned' ? 'Finding Partner' :
+                     b.status === 'assigned' ? 'Partner Assigned' :
+                     b.status === 'in-progress' ? 'In Progress' :
+                     b.status.charAt(0).toUpperCase() + b.status.slice(1)}
                   </span>
-                  {(b.status === 'pending' || b.status === 'accepted') && (
+                  {['unassigned', 'pending', 'assigned', 'accepted'].includes(b.status) && (
                     <button
-                      className="btn-outline"
+                      className="btn-outline text-sm"
                       onClick={() => onCancel(b.id)}
                     >
                       Cancel

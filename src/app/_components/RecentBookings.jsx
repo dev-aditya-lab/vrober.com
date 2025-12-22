@@ -141,8 +141,8 @@ export default function RecentBookings() {
                         {b.serviceId?.serviceName || 'Service'}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {b.vendorId?.name || 'Vendor'}
-                      </p>
+                        {b.vendorId?.name || 'Partner'}
+                      </h3>
                     </div>
                     <span
                       className={`px-3 py-1 ${styles.bg} ${styles.text} rounded-full text-sm font-medium`}

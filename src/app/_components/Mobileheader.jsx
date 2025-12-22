@@ -1,7 +1,11 @@
+'use client';
 import Image from 'next/image';
 import { FaLocationDot } from 'react-icons/fa6';
+import useUserLocation from '@/lib/useUserLocation';
 
 export default function Mobileheader() {
+  const { text: location, isLoading } = useUserLocation();
+
   return (
     <div className="sticky top-0 right-0 left-0 z-50 flex max-w-screen items-center justify-between bg-white px-5 py-3 md:hidden">
       <div className="relative w-32">
@@ -14,8 +18,8 @@ export default function Mobileheader() {
         />
       </div>
       <div className="flex items-center gap-1 text-black">
-        <FaLocationDot className="text-2xl text-black" />
-        <span>Ranchi, JH</span>
+        <FaLocationDot className={`text-2xl text-black ${isLoading ? 'animate-pulse' : ''}`} />
+        <span className="text-sm font-medium">{location}</span>
       </div>
     </div>
   );

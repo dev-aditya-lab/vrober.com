@@ -14,10 +14,10 @@ export default function MostBookedServices() {
     let active = true;
     setLoading(true);
     api
-      .get('/services/home-sections', { params: { limit: 8 } })
+      .get('/services', { params: { sortBy: 'bookingCount', limit: 8 } })
       .then((res) => {
         if (!active) return;
-        setList(res.data.mostBooked || []);
+        setList(res.data.services || []);
       })
       .catch((err) => {
         if (!active) return;

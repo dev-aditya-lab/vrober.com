@@ -43,7 +43,7 @@ export default function OrderHistoryPage() {
               <div>
                 <p className="font-semibold">{b.serviceName}</p>
                 <p className="text-sm text-zinc-500">
-                  {b.vendorName || 'Vendor'} • {b.date?.slice(0, 10)} {b.time}
+                  {b.vendorName || 'Partner'} • {b.date?.slice(0, 10)} {b.time}
                 </p>
               </div>
               <div className="text-right">

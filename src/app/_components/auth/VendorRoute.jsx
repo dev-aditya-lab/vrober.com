@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser, isAuthenticated } from '@/lib/authService';
 
-export default function VendorRoute({ children, redirectTo = '/login' }) {
+export default function PartnerRoute({ children, redirectTo = '/login' }) {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
   const [allowed, setAllowed] = useState(false);
@@ -16,7 +16,7 @@ export default function VendorRoute({ children, redirectTo = '/login' }) {
         return;
       }
       const user = getCurrentUser();
-      if (user?.role === 'vendor') {
+      if (user?.role === 'partner') {
         setAllowed(true);
       } else {
         setAllowed(false);
@@ -41,9 +41,9 @@ export default function VendorRoute({ children, redirectTo = '/login' }) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white px-4">
         <div className="max-w-md text-center">
-          <h1 className="text-2xl font-bold text-black">Vendor Access Only</h1>
-          <p className="mt-2 text-gray-600">
-            This area is reserved for vendors. Please log in with a vendor
+          <h1 className="text-2xl font-bold text-black">Partner Access Only</h1>
+          <p className="mt-2 text-gray-700">
+            This area is reserved for partners. Please log in with a partner
             account or contact support.
           </p>
         </div>

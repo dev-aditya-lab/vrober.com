@@ -51,7 +51,7 @@ export default function sitemap() {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/vendor`,
+      url: `${baseUrl}/partner`,
       lastModified: new Date(),
       changefreq: 'monthly',
       priority: 0.8,
