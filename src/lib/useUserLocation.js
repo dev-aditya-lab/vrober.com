@@ -1,12 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+
 /**
  * Custom hook to get and track user's current location
  * Features:
- * - Auto-detects geolocation
+ * - Auto-detects geolocation via browser
+ * - Uses backend reverse-geocoding (more reliable than frontend)
+ * - Fallback to IP-based location
  * - Caches location in localStorage
- * - Provides fallback handling
  * - Returns city, state code format (e.g., "Ranchi, JH")
  */
 export default function useUserLocation() {
@@ -36,12 +40,13 @@ export default function useUserLocation() {
           isLoading: false,
           error: null,
         });
+        return; // Use cached location
       } catch (e) {
         console.warn('Failed to parse cached location:', e);
       }
     }
 
-    // Try to get current location
+    // Try to get current location via geolocation
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -49,34 +54,24 @@ export default function useUserLocation() {
             const { latitude, longitude } = position.coords;
             const coords = { lat: latitude, lng: longitude };
 
+            // Use backend reverse-geocoding (more reliable)
             const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
+              `${API_URL}/location/reverse-geocode?lat=${latitude}&lng=${longitude}`,
+              { method: 'GET' }
             );
+
+            if (!response.ok) {
+              throw new Error(`Backend geocoding failed: ${response.status}`);
+            }
+
             const data = await response.json();
-
-            // Extract city and state
-            const city =
-              data.address?.city ||
-              data.address?.town ||
-              data.address?.village ||
-              data.address?.county ||
-              'Unknown';
-            const state = data.address?.state || '';
-            const stateCode = state
-              ? state
-                  .split(' ')
-                  .map((w) => w[0])
-                  .join('')
-                  .substring(0, 2)
-                  .toUpperCase()
-              : '';
-
-            const locationText = stateCode ? `${city}, ${stateCode}` : city;
+            const locationText = data.location || 'Unknown';
+            const [city, state] = locationText.split(', ');
 
             setLocation({
               text: locationText,
-              city,
-              state: stateCode,
+              city: city || 'Unknown',
+              state: state || '',
               coords,
               isLoading: false,
               error: null,
@@ -86,38 +81,15 @@ export default function useUserLocation() {
             localStorage.setItem('userLocation', locationText);
             localStorage.setItem('userCoords', JSON.stringify(coords));
           } catch (error) {
-            console.warn('Location name fetch failed:', error);
-            const fallback = cachedLocation || 'India';
-            setLocation({
-              text: fallback,
-              city: fallback,
-              state: '',
-              coords: {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              },
-              isLoading: false,
-              error: 'Failed to get location name',
-            });
+            console.warn('Backend reverse-geocoding failed:', error);
+            // Fallback to IP-based location
+            fetchLocationFromIP(cachedLocation);
           }
         },
         (error) => {
           console.warn('Geolocation error:', error.code);
-          // Fallback to default or cached
-          const fallback = cachedLocation || 'Ranchi, JH';
-          const [city, state] = fallback.split(', ');
-
-          setLocation({
-            text: fallback,
-            city: city || fallback,
-            state: state || 'JH',
-            coords: cachedCoords ? JSON.parse(cachedCoords) : null,
-            isLoading: false,
-            error:
-              error.code === 1
-                ? 'Location permission denied'
-                : 'Location unavailable',
-          });
+          // Fallback to IP-based location
+          fetchLocationFromIP(cachedLocation);
         },
         {
           enableHighAccuracy: false,
@@ -126,18 +98,50 @@ export default function useUserLocation() {
         }
       );
     } else {
-      // No geolocation support
-      const fallback = cachedLocation || 'Ranchi, JH';
-      const [city, state] = fallback.split(', ');
+      // No geolocation support, use IP fallback
+      fetchLocationFromIP(cachedLocation);
+    }
 
-      setLocation({
-        text: fallback,
-        city: city || fallback,
-        state: state || 'JH',
-        coords: null,
-        isLoading: false,
-        error: 'Geolocation not supported',
-      });
+    async function fetchLocationFromIP(fallbackCached) {
+      try {
+        const response = await fetch(`${API_URL}/location/from-ip`, {
+          method: 'GET',
+        });
+
+        if (!response.ok) {
+          throw new Error(`IP lookup failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const locationText = data.location || fallbackCached || 'India';
+        const [city, state] = locationText.split(', ');
+
+        setLocation({
+          text: locationText,
+          city: city || locationText,
+          state: state || '',
+          coords: null,
+          isLoading: false,
+          error: null,
+        });
+
+        // Cache for future use
+        localStorage.setItem('userLocation', locationText);
+      } catch (error) {
+        console.warn('IP-based location lookup failed:', error);
+        // Final fallback to cached or default
+        const fallback = fallbackCached || 'Ranchi, JH';
+        const [city, state] = fallback.split(', ');
+
+        setLocation({
+          text: fallback,
+          city: city || fallback,
+          state: state || 'JH',
+          coords: null,
+          isLoading: false,
+          error: 'Could not determine location',
+        });
+      }
     }
   }, []);
 
